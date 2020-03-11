@@ -4,7 +4,7 @@
 const express = require('express');
 
 //  import individual routers & set to variable
-const postsRouter = require('../posts/posts-router.js');
+const postsRouter = require("../posts/posts-router.js");
 
 //  define server and use express middleware
 const server = express();
@@ -14,8 +14,7 @@ server.use(express.json());
 
 //  verify server is running?
 server.get('/', (req, res) => {
-    const query = req.query;
-    res.status(200).json(query);
+    res.status(200).json({ message: 'Working' });
 });
 
 //  set up server to use correct router for endpoints

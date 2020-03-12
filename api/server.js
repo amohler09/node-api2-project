@@ -4,7 +4,7 @@
 const express = require('express');
 
 //  import individual routers & set to variable
-const postsRouter = require("../posts/posts-router.js");
+const postsRouter = require('../posts/posts-router');
 
 //  define server and use express middleware
 const server = express();

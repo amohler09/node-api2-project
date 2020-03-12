@@ -9,23 +9,33 @@ const Posts = require('../data/db.js')
 //  define a router, capitalize Router & invoke
 const router = express.Router();
 
-router.get('')
+router.get('/', (req, res) => {
+    Posts.find()
+        .then(posts => {
+            res.status(200).json(posts);
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json({ errorMessage: "The posts information could not be retrieved" });
+        })
+});
 
-//      POST request to /api/posts:
-// If the request body is missing the title or contents
-// respond with HTTP status code 400 (Bad Request).
-// If the information about the post is valid:
-// save the new post the the database.
-// return HTTP status code 201 (Created).
-// return the newly created post.
-// If there's an error while saving the post:
-// cancel the request.
-// HTTP status code 500 (Server Error).
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
+    Posts.findById(id)
+        .then(post => {
+            if (post) {
+                res.status(200).json(post)
+            } else {
+                res.status(404).json({ message: "The post with the specified ID does not exist."})
+            }
+        })
+})
+
 router.post('/', (req, res) => {
     Posts.insert(req.body)
     .then(post => {
         res.status(201).json(req.body);
-        console.log(req.body, post);
     })
     .catch(error => {
         console.log(error);
@@ -36,20 +46,6 @@ router.post('/', (req, res) => {
         };
     });
 });
-
-//      POST request to /api/posts/:id/comments:
-// If the post with the specified id is not found:
-// return HTTP status code 404 (Not Found).
-// If the request body is missing the text property:
-// cancel the request.
-// respond with HTTP status code 400 (Bad Request).
-// If the information about the comment is valid:
-// save the new comment the the database.
-// return HTTP status code 201 (Created).
-// return the newly created comment.
-// If there's an error while saving the comment:
-// cancel the request.
-// respond with HTTP status code 500 (Server Error).
 
 router.post('/:id/comments', (req, res) => {
     const id = req.params.id;
@@ -70,6 +66,7 @@ router.post('/:id/comments', (req, res) => {
         }
     });
 });
+
 
 
 //  export router

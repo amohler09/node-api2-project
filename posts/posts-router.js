@@ -9,29 +9,6 @@ const Posts = require('../data/db.js')
 //  define a router, capitalize Router & invoke
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    Posts.find()
-        .then(posts => {
-            res.status(200).json(posts);
-        })
-        .catch(error => {
-            console.log(error);
-            res.status(500).json({ errorMessage: "The posts information could not be retrieved" });
-        })
-});
-
-router.get('/:id', (req, res) => {
-    const id = req.params.id;
-    Posts.findById(id)
-        .then(post => {
-            if (post) {
-                res.status(200).json(post)
-            } else {
-                res.status(404).json({ message: "The post with the specified ID does not exist."})
-            }
-        })
-})
-
 router.post('/', (req, res) => {
     Posts.insert(req.body)
     .then(post => {
@@ -66,6 +43,55 @@ router.post('/:id/comments', (req, res) => {
         }
     });
 });
+
+router.get('/', (req, res) => {
+    Posts.find()
+        .then(posts => {
+            res.status(200).json(posts);
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json({ errorMessage: "The posts information could not be retrieved" });
+        })
+});
+
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
+    Posts.findById(id)
+        .then(post => {
+            if (post) {
+                res.status(200).json(post);
+            } else {
+                res.status(404).json({ message: "The post with the specified ID does not exist."});
+            }
+        });
+});
+
+router.get('/:id/comments', (req, res) => {
+    const id = req.params.id;
+    Posts.findPostComments(id)
+        .then(comment => {
+            if (comment.length > 0) {
+                res.status(200).json(comment);
+            } else {
+                res.status(404).json({ message: "The post with the specified ID does not exist" });
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json({ error: "The comments information could not be retrieved" })
+        })
+})
+
+router.delete('/:id', (req, res) => {
+
+})
+
+router.put('/:id', (req, res) => {
+
+})
+
+
 
 
 

@@ -47,7 +47,7 @@ router.post('/:id/comments', (req, res) => {
 router.get('/', (req, res) => {
     Posts.find()
         .then(posts => {
-            res.status(200).json(posts);
+            res.status(200).json({envMessage: process.env.GREETING, posts});
         })
         .catch(error => {
             console.log(error);
